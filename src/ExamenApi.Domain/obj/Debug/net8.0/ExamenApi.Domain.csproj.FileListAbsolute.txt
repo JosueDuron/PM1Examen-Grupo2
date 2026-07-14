@@ -1,0 +1,11 @@
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\bin\Debug\net8.0\ExamenApi.Domain.deps.json
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\bin\Debug\net8.0\ExamenApi.Domain.dll
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\bin\Debug\net8.0\ExamenApi.Domain.pdb
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.AssemblyInfoInputs.cache
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.AssemblyInfo.cs
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.csproj.CoreCompileInputs.cache
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.dll
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\refint\ExamenApi.Domain.dll
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ExamenApi.Domain.pdb
+C:\Users\duron\OneDrive\Documentos\GitHub\PM1Examen-Grupo2\src\ExamenApi.Domain\obj\Debug\net8.0\ref\ExamenApi.Domain.dll
