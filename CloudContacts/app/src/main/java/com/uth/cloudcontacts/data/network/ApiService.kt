@@ -26,4 +26,16 @@ interface ApiService {
 
     @DELETE("api/contactos/{id}")
     suspend fun eliminarContacto(@Path("id") id: Int): Response<Unit>
+
+    @PUT("api/usuarios")
+    suspend fun actualizarUsuario(@Body request: ActualizarUsuarioDto): Response<Unit>
+
+    @DELETE("api/usuarios/{id}")
+    suspend fun eliminarUsuario(@Path("id") id: Int): Response<Unit>
+
+    @GET("api/contactos/buscar")
+    suspend fun buscarContactos(
+        @Query("texto") texto: String,
+        @Query("usuarioId") usuarioId: Int
+    ): Response<List<Contacto>>
 }

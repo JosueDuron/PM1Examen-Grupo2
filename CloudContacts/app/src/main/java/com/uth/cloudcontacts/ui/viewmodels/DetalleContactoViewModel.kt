@@ -21,6 +21,8 @@ class DetalleContactoViewModel(application: Application) : AndroidViewModel(appl
     var isUpdating by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
     var updateSuccess by mutableStateOf(false)
+    var isDeleting by mutableStateOf(false)
+    var eliminado by mutableStateOf(false)
 
     var nombre by mutableStateOf("")
     var telefono by mutableStateOf("")
@@ -116,5 +118,25 @@ class DetalleContactoViewModel(application: Application) : AndroidViewModel(appl
 
     fun resetUpdateState() {
         updateSuccess = false
+    }
+
+    fun eliminarContacto() {
+        viewModelScope.launch {
+            isDeleting = true
+            errorMessage = null
+            try {
+                val response = RetrofitClient.getApiService(getApplication())
+                    .eliminarContacto(contacto?.id ?: 0)
+                if (response.isSuccessful) {
+                    eliminado = true
+                } else {
+                    errorMessage = "Error al eliminar el contacto"
+                }
+            } catch (e: Exception) {
+                errorMessage = "Error: ${e.message}"
+            } finally {
+                isDeleting = false
+            }
+        }
     }
 }

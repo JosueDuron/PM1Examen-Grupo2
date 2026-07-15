@@ -3,6 +3,7 @@ package com.uth.cloudcontacts.ui.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color as AndroidColor
@@ -59,11 +60,18 @@ fun DetalleContactoScreen(
     val contacto = viewModel.contacto
     val scrollState = rememberScrollState()
     var isEditing by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val fusedLocationClient = remember { LocationServices.getFusedLocationProviderClient(context) }
 
     LaunchedEffect(contactoId) {
         viewModel.fetchContacto(contactoId)
+    }
+
+    LaunchedEffect(viewModel.eliminado) {
+        if (viewModel.eliminado) {
+            onNavigateBack()
+        }
     }
 
     // Launchers para edición
@@ -129,6 +137,13 @@ fun DetalleContactoScreen(
                             Icon(
                                 imageVector = if (isEditing) Icons.Default.Save else Icons.Default.Edit,
                                 contentDescription = if (isEditing) "Guardar" else "Editar",
+                                tint = Color.White
+                            )
+                        }
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Eliminar",
                                 tint = Color.White
                             )
                         }
@@ -229,6 +244,32 @@ fun DetalleContactoScreen(
                         Text("Latitud: ${if (isEditing) viewModel.latitud else contacto.latitud}")
                         Text("Longitud: ${if (isEditing) viewModel.longitud else contacto.longitud}")
                         
+                        if (!isEditing) {
+                            Button(
+                                onClick = {
+                                    val lat = contacto.latitud
+                                    val lon = contacto.longitud
+                                    val name = contacto.nombre ?: "Contacto"
+                                    val uri = Uri.parse("geo:$lat,$lon?q=$lat,$lon(${Uri.encode(name)})")
+                                    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+                                        setPackage("com.google.android.apps.maps")
+                                    }
+                                    try {
+                                        context.startActivity(intent)
+                                    } catch (e: Exception) {
+                                        val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                                        context.startActivity(fallbackIntent)
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = CafeIntermedio),
+                                modifier = Modifier.padding(top = 8.dp)
+                            ) {
+                                Icon(Icons.Default.Map, contentDescription = null)
+                                Spacer(Modifier.width(8.dp))
+                                Text("Ver en Google Maps")
+                            }
+                        }
+                        
                         if (isEditing) {
                             Button(
                                 onClick = {
@@ -300,6 +341,29 @@ fun DetalleContactoScreen(
                 }
             }
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Eliminar contacto") },
+            text = { Text("¿Estás seguro de que deseas eliminar este contacto?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        viewModel.eliminarContacto()
+                    }
+                ) {
+                    Text("Eliminar", color = Color.Red)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }
 

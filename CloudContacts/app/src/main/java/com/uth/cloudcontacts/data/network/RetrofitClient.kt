@@ -6,9 +6,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    private const val BASE_URL = "https://examen-api-XXXX.onrender.com/"
+    private const val BASE_URL = "https://examen-api-vk5e.onrender.com/"
 
     private var retrofit: Retrofit? = null
 
@@ -17,6 +18,9 @@ object RetrofitClient {
             val sessionManager = SessionManager(context)
 
             val client = OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor { chain ->
                     val requestBuilder = chain.request().newBuilder()
                     val token = sessionManager.getToken()

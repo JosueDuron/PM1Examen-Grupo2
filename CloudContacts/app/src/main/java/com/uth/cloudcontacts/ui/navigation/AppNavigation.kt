@@ -55,6 +55,9 @@ fun AppNavigation() {
                 onNavigateToDetail = { contactoId ->
                     navController.navigate("detalle_contacto/$contactoId")
                 },
+                onNavigateToProfile = {
+                    navController.navigate("perfil")
+                },
                 onLogout = {
                     sessionManager.clearSession()
                     RetrofitClient.reset()
@@ -69,6 +72,19 @@ fun AppNavigation() {
         composable("agregar_contacto") {
             AgregarContactoScreen(
                 usuarioId = userId
+            )
+        }
+
+        composable("perfil") {
+            UserProfileScreen(
+                userId = userId,
+                onNavigateBack = { navController.popBackStack() },
+                onCuentaEliminada = {
+                    userId = 0
+                    navController.navigate("login") {
+                        popUpTo("lista_contactos") { inclusive = true }
+                    }
+                }
             )
         }
 

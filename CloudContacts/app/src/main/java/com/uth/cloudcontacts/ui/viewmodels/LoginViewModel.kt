@@ -37,7 +37,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 if (response.isSuccessful) {
                     response.body()?.let { auth ->
                         userId = auth.id
-                        sessionManager.saveSession(auth.id, auth.token)
+                        sessionManager.saveSession(auth.id, auth.token, email)
                         RetrofitClient.reset()
                         loginSuccess = true
                     } ?: run {

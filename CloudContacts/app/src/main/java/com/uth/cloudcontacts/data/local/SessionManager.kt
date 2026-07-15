@@ -9,18 +9,26 @@ class SessionManager(context: Context) {
     companion object {
         private const val KEY_USER_ID = "user_id"
         private const val KEY_TOKEN = "auth_token"
+        private const val KEY_EMAIL = "user_email"
         private const val KEY_LOGIN_TIME = "login_time"
         private const val SESSION_DURATION_MS = 5 * 60 * 1000
     }
 
-    fun saveSession(userId: Int, token: String) {
+    fun saveSession(userId: Int, token: String, email: String? = null) {
         prefs.edit().apply {
             putInt(KEY_USER_ID, userId)
             putString(KEY_TOKEN, token)
+            email?.let { putString(KEY_EMAIL, it) }
             putLong(KEY_LOGIN_TIME, System.currentTimeMillis())
             apply()
         }
     }
+
+    fun saveUserEmail(email: String) {
+        prefs.edit().putString(KEY_EMAIL, email).apply()
+    }
+
+    fun getUserEmail(): String? = prefs.getString(KEY_EMAIL, null)
 
     fun getToken(): String? = prefs.getString(KEY_TOKEN, null)
 
