@@ -47,13 +47,13 @@ import androidx.core.content.FileProvider
 import java.io.File
 import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
+import com.uth.cloudcontacts.ui.theme.CafeArena
+import com.uth.cloudcontacts.ui.theme.CafeIntermedio
+import com.uth.cloudcontacts.ui.theme.CafeOscuro
 import com.uth.cloudcontacts.ui.viewmodels.AgregarContactoViewModel
 import java.io.ByteArrayOutputStream
 
 // Paleta de Colores Café
-val CafeOscuro = Color(0xFF5D4037)
-val CafeArena = Color(0xFFF5F5DC)
-val CafeIntermedio = Color(0xFF8D6E63)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -7,17 +7,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.uth.cloudcontacts.ui.screens.*
-
 import androidx.compose.ui.platform.LocalContext
 import com.uth.cloudcontacts.data.local.SessionManager
+import com.uth.cloudcontacts.data.network.RetrofitClient
 
 @Composable
 fun AppNavigation() {
     val context = LocalContext.current
     val sessionManager = remember { SessionManager(context) }
     val navController = rememberNavController()
-    
-    // Estados globales para la sesión
+
     var userId by remember { mutableIntStateOf(sessionManager.getActiveUserId()) }
     val startDestination = if (userId != 0) "lista_contactos" else "login"
 
@@ -26,7 +25,6 @@ fun AppNavigation() {
             LoginScreen(
                 onLoginSuccess = { id ->
                     userId = id
-                    sessionManager.saveSession(id)
                     navController.navigate("lista_contactos") {
                         popUpTo("login") { inclusive = true }
                     }
@@ -36,7 +34,7 @@ fun AppNavigation() {
                 }
             )
         }
-        
+
         composable("register") {
             RegisterScreen(
                 onRegisterSuccess = {
@@ -47,7 +45,7 @@ fun AppNavigation() {
                 }
             )
         }
-        
+
         composable("lista_contactos") {
             ListaContactosScreen(
                 usuarioId = userId,
@@ -59,6 +57,7 @@ fun AppNavigation() {
                 },
                 onLogout = {
                     sessionManager.clearSession()
+                    RetrofitClient.reset()
                     userId = 0
                     navController.navigate("login") {
                         popUpTo("lista_contactos") { inclusive = true }
@@ -66,7 +65,7 @@ fun AppNavigation() {
                 }
             )
         }
-        
+
         composable("agregar_contacto") {
             AgregarContactoScreen(
                 usuarioId = userId

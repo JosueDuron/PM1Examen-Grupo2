@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,7 +20,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.layout.ContentScale
 import android.util.Base64
 import coil.compose.AsyncImage
-import com.uth.cloudcontacts.data.network.model.ContactoResponse
+import com.uth.cloudcontacts.ui.theme.CafeArena
+import com.uth.cloudcontacts.ui.theme.CafeIntermedio
+import com.uth.cloudcontacts.ui.theme.CafeOscuro
+import com.uth.cloudcontacts.domain.model.Contacto
 import com.uth.cloudcontacts.ui.viewmodels.ListaContactosViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +35,6 @@ fun ListaContactosScreen(
     onLogout: () -> Unit,
     viewModel: ListaContactosViewModel = viewModel()
 ) {
-    // Cargar contactos al iniciar
     LaunchedEffect(Unit) {
         viewModel.fetchContactos(usuarioId)
     }
@@ -91,7 +92,7 @@ fun ListaContactosScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactoCard(contacto: ContactoResponse, onClick: () -> Unit) {
+fun ContactoCard(contacto: Contacto, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -108,7 +109,7 @@ fun ContactoCard(contacto: ContactoResponse, onClick: () -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = contacto.nombre ?: "Sin nombre",
+                    text = contacto.nombre,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = CafeOscuro
@@ -117,10 +118,10 @@ fun ContactoCard(contacto: ContactoResponse, onClick: () -> Unit) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(14.dp), tint = CafeIntermedio)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(contacto.telefono ?: "Sin teléfono", fontSize = 13.sp, color = Color.DarkGray)
+                    Text(contacto.telefono, fontSize = 13.sp, color = Color.DarkGray)
                 }
                 Text(
-                    text = contacto.direccion ?: "Sin dirección",
+                    text = contacto.direccion,
                     fontSize = 12.sp,
                     color = Color.Gray,
                     maxLines = 1

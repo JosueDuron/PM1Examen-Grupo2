@@ -60,16 +60,6 @@ class DetalleContactoViewModel(application: Application) : AndroidViewModel(appl
         }
     }
 
-    // MÉTODO AGREGADO - Formateo de teléfono
-    fun onTelefonoChange(newValue: String) {
-        val digitsOnly = newValue.filter { it.isDigit() }
-        telefono = when {
-            digitsOnly.length <= 4 -> digitsOnly
-            digitsOnly.length <= 8 -> "${digitsOnly.substring(0, 4)}-${digitsOnly.substring(4)}"
-            else -> "${digitsOnly.substring(0, 4)}-${digitsOnly.substring(4, 8)}"
-        }
-    }
-
     fun onImageSelected(inputStream: InputStream?) {
         inputStream?.let {
             val bitmap = BitmapFactory.decodeStream(it)

@@ -1,34 +1,29 @@
 package com.uth.cloudcontacts.data.network
 
-import com.uth.cloudcontacts.data.network.model.AuthRequest
-import com.uth.cloudcontacts.data.network.model.AuthResponse
-import com.uth.cloudcontacts.data.network.model.ContactoRequest
-import com.uth.cloudcontacts.data.network.model.ContactoResponse
-import com.uth.cloudcontacts.data.network.model.RegisterRequest
+import com.uth.cloudcontacts.data.network.model.*
+import com.uth.cloudcontacts.domain.model.Contacto
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
+    @POST("api/usuarios/registrar")
+    suspend fun registrarUsuario(@Body request: RegisterRequest): Response<AuthResponse>
 
-    @POST("api/Usuarios/login")
-    suspend fun postLogin(@Body request: AuthRequest): Response<AuthResponse>
+    @POST("api/usuarios/login")
+    suspend fun loginUsuario(@Body request: AuthRequest): Response<AuthResponse>
 
-    @POST("api/Usuarios/registrar")
-    suspend fun postRegister(@Body request: RegisterRequest): Response<Void>
+    @GET("api/contactos")
+    suspend fun obtenerContactos(@Query("usuarioId") usuarioId: Int): Response<List<Contacto>>
 
-    @POST("api/Contactos")
-    suspend fun postContacto(
-        @Body request: ContactoRequest
-    ): Response<ContactoResponse>
+    @GET("api/contactos/{id}")
+    suspend fun obtenerContactoPorId(@Path("id") id: Int): Response<Contacto>
 
-    @GET("api/Contactos")
-    suspend fun getContactosPorUsuario(
-        @Query("usuarioId") usuarioId: Int
-    ): Response<List<ContactoResponse>>
+    @POST("api/contactos")
+    suspend fun crearContacto(@Body request: ContactoRequest): Response<Contacto>
 
-    @GET("api/Contactos/{id}")
-    suspend fun getContactoById(@Path("id") id: Int): Response<ContactoResponse>
+    @PUT("api/contactos")
+    suspend fun actualizarContacto(@Body request: ContactoRequest): Response<Unit>
 
-    @PUT("api/Contactos")
-    suspend fun putContacto(@Body request: ContactoResponse): Response<Void>
+    @DELETE("api/contactos/{id}")
+    suspend fun eliminarContacto(@Path("id") id: Int): Response<Unit>
 }

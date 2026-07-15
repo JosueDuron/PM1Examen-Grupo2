@@ -1,27 +1,29 @@
 package com.uth.cloudcontacts.ui.viewmodels
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.uth.cloudcontacts.data.local.SessionManager
 import com.uth.cloudcontacts.data.network.RetrofitClient
 import com.uth.cloudcontacts.data.network.model.AuthRequest
-import com.uth.cloudcontacts.data.network.model.AuthResponse
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
-
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
-    
     var isLoading by mutableStateOf(false)
     var errorMessage by mutableStateOf<String?>(null)
-    var authData by mutableStateOf<AuthResponse?>(null)
+    var loginSuccess by mutableStateOf(false)
+    var userId by mutableStateOf(0)
 
-    fun login(onSuccess: (AuthResponse) -> Unit) {
+    private val sessionManager = SessionManager(application)
+
+    fun login() {
         if (email.isBlank() || password.isBlank()) {
-            errorMessage = "Completa todos los campos"
+            errorMessage = "Complete todos los campos"
             return
         }
 
@@ -29,24 +31,31 @@ class LoginViewModel : ViewModel() {
             isLoading = true
             errorMessage = null
             try {
-                val response = RetrofitClient.apiService.postLogin(AuthRequest(email, password))
+                val response = RetrofitClient.getApiService(getApplication())
+                    .loginUsuario(AuthRequest(email, password))
+
                 if (response.isSuccessful) {
-                    val data = response.body()
-                    if (data != null && data.id > 0) {
-                        authData = data
-                        onSuccess(data)
-                    } else {
-                        errorMessage = data?.mensaje ?: "Usuario o contraseña incorrectos"
+                    response.body()?.let { auth ->
+                        userId = auth.id
+                        sessionManager.saveSession(auth.id, auth.token)
+                        RetrofitClient.reset()
+                        loginSuccess = true
+                    } ?: run {
+                        errorMessage = "Respuesta vacia del servidor"
                     }
                 } else {
-                    val errorBody = response.errorBody()?.string()
-                    errorMessage = if (!errorBody.isNullOrBlank()) errorBody else "Credenciales incorrectas (401)"
+                    errorMessage = "Credenciales incorrectas"
                 }
             } catch (e: Exception) {
-                errorMessage = "Error de red: ${e.message}"
+                errorMessage = "Error: ${e.message}"
             } finally {
                 isLoading = false
             }
         }
+    }
+
+    fun resetState() {
+        loginSuccess = false
+        errorMessage = null
     }
 }

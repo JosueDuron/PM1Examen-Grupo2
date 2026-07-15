@@ -16,6 +16,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.uth.cloudcontacts.ui.theme.CafeIntermedio
+import com.uth.cloudcontacts.ui.theme.CafeOscuro
 import com.uth.cloudcontacts.ui.viewmodels.RegisterViewModel
 
 @Composable
@@ -24,6 +26,12 @@ fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
     viewModel: RegisterViewModel = viewModel()
 ) {
+    LaunchedEffect(viewModel.registerSuccess) {
+        if (viewModel.registerSuccess) {
+            onRegisterSuccess()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,6 +80,22 @@ fun RegisterScreen(
             )
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = viewModel.confirmPassword,
+            onValueChange = { viewModel.confirmPassword = it },
+            label = { Text("Confirmar Contraseña") },
+            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = CafeOscuro) },
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = CafeOscuro,
+                focusedLabelColor = CafeOscuro
+            )
+        )
+
         Spacer(modifier = Modifier.height(32.dp))
 
         if (viewModel.isLoading) {
@@ -79,9 +103,7 @@ fun RegisterScreen(
         } else {
             Button(
                 onClick = {
-                    viewModel.register {
-                        onRegisterSuccess()
-                    }
+                    viewModel.register()
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CafeOscuro),
@@ -95,7 +117,7 @@ fun RegisterScreen(
             Text(it, color = Color.Red, modifier = Modifier.padding(top = 16.dp))
         }
 
-        if (viewModel.isSuccess) {
+        if (viewModel.registerSuccess) {
             Text("¡Registro exitoso! Inicia sesión.", color = Color(0xFF2E7D32), modifier = Modifier.padding(top = 16.dp))
         }
 

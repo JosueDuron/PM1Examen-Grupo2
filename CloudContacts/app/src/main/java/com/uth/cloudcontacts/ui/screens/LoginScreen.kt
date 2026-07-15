@@ -20,6 +20,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.uth.cloudcontacts.ui.theme.CafeIntermedio
+import com.uth.cloudcontacts.ui.theme.CafeOscuro
 import com.uth.cloudcontacts.ui.viewmodels.LoginViewModel
 
 @Composable
@@ -29,6 +31,13 @@ fun LoginScreen(
     viewModel: LoginViewModel = viewModel()
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(viewModel.loginSuccess) {
+        if (viewModel.loginSuccess) {
+            onLoginSuccess(viewModel.userId)
+            viewModel.resetState()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -95,9 +104,7 @@ fun LoginScreen(
         } else {
             Button(
                 onClick = {
-                    viewModel.login { response ->
-                        onLoginSuccess(response.id)
-                    }
+                    viewModel.login()
                 },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CafeOscuro),

@@ -42,6 +42,9 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.google.android.gms.location.LocationServices
+import com.uth.cloudcontacts.ui.theme.CafeArena
+import com.uth.cloudcontacts.ui.theme.CafeIntermedio
+import com.uth.cloudcontacts.ui.theme.CafeOscuro
 import com.uth.cloudcontacts.ui.viewmodels.DetalleContactoViewModel
 import java.io.ByteArrayOutputStream
 import java.io.File
